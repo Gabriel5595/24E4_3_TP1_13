@@ -1,11 +1,26 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import TaskInput from './components/TaskInput';
+import TaskList from './components/TaskList';
 
 export default function App() {
+  const [tasks, setTasks] = useState([]);
+
+  const addTask = (task) => {
+    if (task.trim()) {
+      setTasks([...tasks, { id: Math.random().toString(), title: task }]);
+    }
+  };
+
+  const removeTask = (taskId) => {
+    setTasks(tasks.filter(task => task.id !== taskId));
+  };
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <Text style={styles.title}>Lista de Tarefas</Text>
+      <TaskInput onAddTask={addTask} />
+      <TaskList tasks={tasks} onRemoveTask={removeTask} />
     </View>
   );
 }
@@ -13,8 +28,14 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    padding: 20,
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#f5f5f5',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
   },
 });
